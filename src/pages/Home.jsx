@@ -534,63 +534,62 @@ const tracks = [
   { 
     title: 'SACRED CHANT', 
     artist: 'RABBI LIGHT SHALOM', 
-    url: 'public/music/SACRED_CHANT.mp3', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446985/Heavenly%20Immortal%20Sounds/Music/SACRED_CHANT_k32gp8.mp3',
     type: 'Worship'
   },
   { 
-   title: 'YAHWEH MAGENENU', 
-   artist: 'RABBI LIGHT SHALOM', 
-   url: 'public/music/YAHWEH_MAGENENU.mp3',
-   type: 'Worship'
-   },
-   { 
-     title: 'INTO YOU', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/INTO_YOU.mp3',
-     type: 'Worship'
-   },
-   { 
-     title: 'SO GREAT', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/SO_GREAT.mp3',
-     type: 'Worship'
-   },
-   { 
-     title: 'HOW GREAT', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/HOW_GREAT.mp3',
-     type: 'Worship'
-   },
-   { 
-     title: 'MY HEALER', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/My_healer.mp3',
-     type: 'Worship'
-   },
-   { 
-     title: 'IKEDI', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/Ikedi.mp3',
-     type: 'Worship'
-   },
-   { 
-     title: 'IDIEBERE', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/Idiebere.mp3',
-     type: 'Worship'
-   },
-   { 
-     title: 'I PRAY ONE DAY', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/I_pray_one_day.mp3',
-     type: 'Worship'
-   },
-   { 
-     title: 'FIRE ME UP', 
-     artist: 'RABBI LIGHT SHALOM', 
-     url: 'public/music/Lord_fire_me_up.mp3',
-     type: 'Worship'
-   }
+    title: 'YAHWEH MAGENENU', 
+    artist: 'RABBI LIGHT SHALOM', 
+     url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446993/Heavenly%20Immortal%20Sounds/Music/YAHWEH_MAGENENU_jgzwte.mp3',
+  },
+  { 
+    title: 'INTO YOU', 
+    artist: 'RABBI LIGHT SHALOM', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446976/Heavenly%20Immortal%20Sounds/Music/INTO_YOU_xx0vos.mp3',
+    type: 'Worship'
+  },
+  { 
+    title: 'SO GREAT', 
+    artist: 'RABBI LIGHT SHALOM', 
+      url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446992/Heavenly%20Immortal%20Sounds/Music/SO_GREAT_sas0im.mp3',
+    type: 'Worship'
+  },
+  { 
+    title: 'HOW GREAT', 
+    artist: 'RABBI LIGHT SHALOM', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446869/Heavenly%20Immortal%20Sounds/Music/HOW_GREAT_u6ulbh.mp3',
+    type: 'Worship'
+  },
+  { 
+    title: 'MY HEALER', 
+    artist: 'RABBI LIGHT SHALOM', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446962/Heavenly%20Immortal%20Sounds/Music/My_healer_gdebip.mp3',
+    type: 'Worship'
+  },
+  { 
+    title: 'IKEDI', 
+    artist: 'RABBI LIGHT SHALOM', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446963/Heavenly%20Immortal%20Sounds/Music/Ikedi_fhvaki.mp3',
+    type: 'Worship'
+  },
+  { 
+    title: 'IDIEBERE', 
+    artist: 'RABBI LIGHT SHALOM', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446980/Heavenly%20Immortal%20Sounds/Music/qwa7f3e6pmji7ts8tlmq.mp3',
+    type: 'Worship'
+  },
+  { 
+    title: 'I PRAY ONE DAY', 
+    artist: 'RABBI LIGHT SHALOM', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446865/Heavenly%20Immortal%20Sounds/Music/I_pray_one_day_cchxjk.mp3',
+    type: 'Worship'
+  },
+  { 
+    title: 'FIRE ME UP', 
+    artist: 'RABBI LIGHT SHALOM', 
+    url: 'https://res.cloudinary.com/dqhcroiw8/video/upload/v1764446995/Heavenly%20Immortal%20Sounds/Music/Lord_fire_me_up_dhvydi.mp3',
+    type: 'Worship'
+  }
 ];
 
 
