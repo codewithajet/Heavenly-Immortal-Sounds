@@ -961,7 +961,108 @@ useEffect(() => {
     </div>
   );
 
-  const ContactPage = () => (
+const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  // Status for messages (JSX version — no TypeScript types)
+  const [status, setStatus] = useState({
+    type: '', // 'success' | 'error'
+    message: ''
+  });
+
+  // API URL (fallback for development)
+  const API_URL = import.meta.env.VITE_API_URL || 'https://heavenly-immortal-sounds-server.onrender.com/api';
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    // Clear error when typing
+    if (status.type === 'error') {
+      setStatus({ type: '', message: '' });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus({ type: '', message: '' });
+
+    // Validation
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      setStatus({ type: 'error', message: 'Please fill in all fields' });
+      setLoading(false);
+      return;
+    }
+
+    if (formData.name.trim().length < 2) {
+      setStatus({ type: 'error', message: 'Name must be at least 2 characters long' });
+      setLoading(false);
+      return;
+    }
+
+    if (formData.message.trim().length < 10) {
+      setStatus({ type: 'error', message: 'Please write a message with at least 10 characters' });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/contact/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          message: formData.message.trim()
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus({
+          type: 'success',
+          message: data.message || 'Thank you! Your message has been sent successfully.'
+        });
+
+        // Reset form
+        setFormData({ name: '', email: '', message: '' });
+
+        // Hide after 10s
+        setTimeout(() => {
+          setStatus({ type: '', message: '' });
+        }, 10000);
+      } else {
+        setStatus({
+          type: 'error',
+          message: data.message || 'Something went wrong. Please try again.'
+        });
+      }
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setStatus({
+        type: 'error',
+        message:
+          'Failed to send message. Please check your internet connection and try again.'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
     <div className="min-h-screen pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-10 md:mb-16 animate-fade-in-up">
@@ -969,15 +1070,22 @@ useEffect(() => {
           <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mt-3 md:mt-4 mb-4 md:mb-6" style={{ fontFamily: 'Georgia, serif' }}>Get In Touch</h1>
           <p className="text-gray-400 text-sm md:text-lg max-w-2xl mx-auto px-2">We are open for church invitations, worship concerts, revivals, and Christian gatherings.</p>
         </div>
+
         <div className="grid lg:grid-cols-2 gap-6 md:gap-10 mb-10 md:mb-16">
+          {/* Contact Information */}
           <div className="space-y-3 md:space-y-5">
             {[
-              { icon: <PhoneCall size={20} />, label: 'Bookings & Enquiries', value: '08136511666', sub: 'Call/WhatsApp – Secretary' },
-              { icon: <MapPin size={20} />, label: 'Our Address', value: 'No. 1 Mohammed Abu Street', sub: 'Okeira-Nla, Ajah, Lagos, Nigeria' },
-              { icon: <Mail size={20} />, label: 'Email Us', value: 'info@heavenlyimmortalsounds.com', sub: 'We respond within 24 hours' },
-              { icon: <Clock size={20} />, label: 'Availability', value: 'Open for Bookings', sub: 'Available 24/7 for enquiries' }
+              { icon: <PhoneCall size={20} />, label: 'Bookings & Enquiries', value: '08136511666', sub: 'Call/WhatsApp – Secretary', link: 'tel:+2348136511666' },
+              { icon: <MapPin size={20} />, label: 'Our Address', value: 'No. 1 Mohammed Abu Street', sub: 'Okeira-Nla, Ajah, Lagos, Nigeria', link: 'https://maps.google.com/?q=No.1+Mohammed+Abu+Street+Okeira-Nla+Ajah+Lagos' },
+              { icon: <Mail size={20} />, label: 'Email Us', value: 'info@heavenlyimmortalsounds.com', sub: 'We respond within 24 hours', link: 'mailto:info@heavenlyimmortalsounds.com' },
+              { icon: <Clock size={20} />, label: 'Availability', value: 'Open for Bookings', sub: 'Available 24/7 for enquiries', link: null }
             ].map((item, i) => (
-              <div key={i} className="flex gap-3 md:gap-5 p-4 md:p-6 rounded-xl md:rounded-2xl bg-gradient-to-r from-amber-900/15 to-transparent border border-amber-900/25 hover:border-amber-500/40 transition-all duration-300 animate-fade-in-left" style={{ animationDelay: `${i * 100}ms` }}>
+              <div 
+                key={i} 
+                className={`flex gap-3 md:gap-5 p-4 md:p-6 rounded-xl md:rounded-2xl bg-gradient-to-r from-amber-900/15 to-transparent border border-amber-900/25 hover:border-amber-500/40 transition-all duration-300 animate-fade-in-left ${item.link ? 'cursor-pointer' : ''}`}
+                style={{ animationDelay: `${i * 100}ms` }}
+                onClick={() => item.link && window.open(item.link, item.link.startsWith('http') ? '_blank' : '_self')}
+              >
                 <div className="w-10 h-10 md:w-14 md:h-14 rounded-lg md:rounded-xl bg-amber-900/30 flex items-center justify-center text-amber-500 flex-shrink-0">{item.icon}</div>
                 <div className="min-w-0">
                   <p className="text-gray-500 text-xs md:text-sm mb-0.5 md:mb-1">{item.label}</p>
@@ -987,28 +1095,110 @@ useEffect(() => {
               </div>
             ))}
           </div>
+
+          {/* Contact Form */}
           <div className="p-5 md:p-8 rounded-2xl md:rounded-3xl bg-gradient-to-br from-amber-900/20 to-black border border-amber-800/30 animate-fade-in-right">
             <h3 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6" style={{ fontFamily: 'Georgia, serif' }}>Send Us a Message</h3>
-            <div className="space-y-3 md:space-y-5">
+            
+            {/* Status Messages */}
+            {status.message && (
+              <div className={`mb-4 md:mb-6 p-4 rounded-lg border animate-fade-in-up ${
+                status.type === 'success' 
+                  ? 'bg-green-900/20 border-green-500/50 text-green-400' 
+                  : 'bg-red-900/20 border-red-500/50 text-red-400'
+              }`}>
+                <div className="flex items-start gap-3">
+                  {status.type === 'success' ? (
+                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                  <p className="text-sm leading-relaxed flex-1">{status.message}</p>
+                </div>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit} className="space-y-3 md:space-y-5">
               <div className="animate-fade-in-up" style={{ animationDelay: '300ms' }}>
-                <label className="text-gray-400 text-xs md:text-sm mb-1.5 md:mb-2 block">Your Name</label>
-                <input type="text" placeholder="Enter your full name" className="w-full px-4 md:px-5 py-3 md:py-4 rounded-lg md:rounded-xl bg-black/50 border border-amber-900/30 text-white text-sm md:text-base placeholder-gray-600 focus:border-amber-500 focus:outline-none transition-colors" />
+                <label htmlFor="name" className="text-gray-400 text-xs md:text-sm mb-1.5 md:mb-2 block">
+                  Your Name <span className="text-red-500">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Enter your full name" 
+                  required
+                  minLength={2}
+                  disabled={loading}
+                  className="w-full px-4 md:px-5 py-3 md:py-4 rounded-lg md:rounded-xl bg-black/50 border border-amber-900/30 text-white text-sm md:text-base placeholder-gray-600 focus:border-amber-500 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                />
               </div>
+
               <div className="animate-fade-in-up" style={{ animationDelay: '400ms' }}>
-                <label className="text-gray-400 text-xs md:text-sm mb-1.5 md:mb-2 block">Email Address</label>
-                <input type="email" placeholder="Enter your email" className="w-full px-4 md:px-5 py-3 md:py-4 rounded-lg md:rounded-xl bg-black/50 border border-amber-900/30 text-white text-sm md:text-base placeholder-gray-600 focus:border-amber-500 focus:outline-none transition-colors" />
+                <label htmlFor="email" className="text-gray-400 text-xs md:text-sm mb-1.5 md:mb-2 block">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input 
+                  type="email" 
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  placeholder="Enter your email" 
+                  required
+                  disabled={loading}
+                  className="w-full px-4 md:px-5 py-3 md:py-4 rounded-lg md:rounded-xl bg-black/50 border border-amber-900/30 text-white text-sm md:text-base placeholder-gray-600 focus:border-amber-500 focus:outline-none transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                />
               </div>
+
               <div className="animate-fade-in-up" style={{ animationDelay: '500ms' }}>
-                <label className="text-gray-400 text-xs md:text-sm mb-1.5 md:mb-2 block">Your Message</label>
-                <textarea placeholder="Tell us about your event..." rows={3} className="w-full px-4 md:px-5 py-3 md:py-4 rounded-lg md:rounded-xl bg-black/50 border border-amber-900/30 text-white text-sm md:text-base placeholder-gray-600 focus:border-amber-500 focus:outline-none transition-colors resize-none" />
+                <label htmlFor="message" className="text-gray-400 text-xs md:text-sm mb-1.5 md:mb-2 block">
+                  Your Message <span className="text-red-500">*</span>
+                </label>
+                <textarea 
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Tell us about your event, preferred dates, and any special requirements..." 
+                  rows={5}
+                  required
+                  minLength={10}
+                  disabled={loading}
+                  className="w-full px-4 md:px-5 py-3 md:py-4 rounded-lg md:rounded-xl bg-black/50 border border-amber-900/30 text-white text-sm md:text-base placeholder-gray-600 focus:border-amber-500 focus:outline-none transition-colors resize-none disabled:opacity-50 disabled:cursor-not-allowed" 
+                />
               </div>
-              <button className="w-full py-3 md:py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-sm md:text-base rounded-lg md:rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 flex items-center justify-center gap-2 md:gap-3 animate-fade-in-up" style={{ animationDelay: '600ms' }}>
-                <Send size={18} />
-                Send Message
+
+              <button 
+                type="submit"
+                disabled={loading}
+                className="w-full py-3 md:py-4 bg-gradient-to-r from-amber-500 to-amber-600 text-black font-bold text-sm md:text-base rounded-lg md:rounded-xl hover:from-amber-400 hover:to-amber-500 transition-all duration-300 flex items-center justify-center gap-2 md:gap-3 animate-fade-in-up disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-amber-500/30" 
+                style={{ animationDelay: '600ms' }}
+              >
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    Send Message
+                  </>
+                )}
               </button>
-            </div>
+            </form>
           </div>
         </div>
+
+        {/* Social Media Section */}
         <div className="text-center p-6 md:p-10 rounded-2xl md:rounded-3xl bg-gradient-to-r from-amber-900/20 via-transparent to-amber-900/20 border border-amber-800/20 animate-fade-in-up">
           <p className="text-amber-400 tracking-widest text-xs font-medium mb-4 md:mb-6 uppercase">Follow Us on Social Media</p>
           <div className="flex justify-center gap-3 md:gap-4 mb-4 md:mb-6">
@@ -1017,7 +1207,14 @@ useEffect(() => {
               { Icon: Youtube, url: "/" },
               { Icon: Facebook, url: "https://www.facebook.com/heavenlyimmortalsound" }
             ].map(({ Icon, url }, i) => (
-              <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-amber-600/40 text-amber-400 hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all duration-300 flex items-center justify-center animate-zoom-in" style={{ animationDelay: `${i * 100}ms` }}>
+              <a 
+                key={i} 
+                href={url} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-12 h-12 md:w-14 md:h-14 rounded-full border border-amber-600/40 text-amber-400 hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all duration-300 flex items-center justify-center animate-zoom-in" 
+                style={{ animationDelay: `${i * 100}ms` }}
+              >
                 <Icon size={20} className="md:hidden" />
                 <Icon size={24} className="hidden md:block" />
               </a>
@@ -1028,6 +1225,7 @@ useEffect(() => {
       </div>
     </div>
   );
+};
 
   return (
     <div className="min-h-screen bg-black text-white overflow-x-hidden" style={{ fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif" }}>
