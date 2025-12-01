@@ -79,7 +79,7 @@ export default function App() {
             <div className="flex gap-3">
               {[
                 { Icon: Instagram, url: "https://www.instagram.com/theheavenlysounds/" },
-                { Icon: Facebook, url: "https://www.facebook.com/heavenlyimmortalsound" },
+                { Icon: Facebook, url: "https://www.facebook.com/heavenlyimmortalsounds" },
                 { Icon: Youtube, url: "/" }
               ].map(({ Icon, url }, i) => (
                 <a key={i} href={url} target="_blank" rel="noopener noreferrer"
@@ -919,47 +919,215 @@ useEffect(() => {
   );
 };
 
-  const GalleryPage = () => (
-    <div className="min-h-screen pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6">
+const GalleryPage = () => {
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  // Gallery images - Replace these URLs with your actual images
+  const galleryImages = [
+    {
+      id: 1,
+      src: 'https://res.cloudinary.com/dqhcroiw8/image/upload/v1764609359/Heavenly%20Immortal%20Sounds/589938229_1152146697122990_5206127833537437697_n_jsbgh6.jpg',
+      category: 'Live Events',
+      title: 'Live Worship Night',
+      subtitle: 'Lagos 2025',
+      gradient: 'from-amber-600 to-orange-700'
+    },
+    {
+      id: 2,
+      src: 'https://res.cloudinary.com/dqhcroiw8/image/upload/v1764609720/Heavenly%20Immortal%20Sounds/591745955_1154643833539943_7677274739103208226_n_xirvwc.jpg', 
+      category: 'Studio',
+      title: 'Studio Recording',
+      subtitle: 'Album Session',
+      gradient: 'from-amber-700 to-yellow-600'
+    },
+    {
+      id: 3,
+      src: 'https://res.cloudinary.com/dqhcroiw8/image/upload/v1764610988/Heavenly%20Immortal%20Sounds/576838560_1135916388746021_82107128238977323_n_eivo5z.jpg',
+      category: 'OPÍFÈ',
+      title: 'OPÍFÈ Performance',
+      subtitle: 'Prophetic Night',
+      gradient: 'from-orange-600 to-amber-700'
+    },
+    {
+      id: 4,
+      src: 'https://res.cloudinary.com/dqhcroiw8/image/upload/v1764611933/Heavenly%20Immortal%20Sounds/587534677_1154643126873347_4275412140488490737_n_gnsgbx.jpg', 
+      category: 'Behind the Scenes',
+      title: 'Team Rehearsal',
+      subtitle: 'Weekly Practice',
+      gradient: 'from-yellow-700 to-amber-600'
+    },
+    {
+      id: 5,
+      src: 'https://res.cloudinary.com/dqhcroiw8/image/upload/v1764611479/Heavenly%20Immortal%20Sounds/569032536_1127318196272507_6566213939859238654_n_qnzjop.jpg', 
+      category: 'Live Events',
+      title: 'Revival Meeting',
+      subtitle: 'Abuja 2024',
+      gradient: 'from-amber-800 to-orange-600'
+    },
+    {
+      id: 6,
+      src: 'https://res.cloudinary.com/dqhcroiw8/image/upload/v1764611640/Heavenly%20Immortal%20Sounds/572256594_1132982565706070_1999726732547568654_n_hdy9fn.jpg', 
+      category: 'Live Events',
+      title: 'Church Service',
+      subtitle: 'Guest Ministration',
+      gradient: 'from-orange-700 to-yellow-700'
+    }
+  ];
+
+  const categories = ['All', 'Live Events', 'Studio', 'OPÍFÈ', 'Behind the Scenes'];
+
+  const filteredImages = selectedCategory === 'All' 
+    ? galleryImages 
+    : galleryImages.filter(img => img.category === selectedCategory);
+
+  return (
+    <div className="min-h-screen pt-24 md:pt-32 pb-16 md:pb-20 px-4 md:px-6 bg-black">
       <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <div className="text-center mb-10 md:mb-16 animate-fade-in-up">
-          <span className="text-amber-400 tracking-[0.2em] md:tracking-[0.3em] text-xs font-medium uppercase">Moments</span>
-          <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mt-3 md:mt-4 mb-4 md:mb-6" style={{ fontFamily: 'Georgia, serif' }}>Gallery</h1>
-          <p className="text-gray-400 text-sm md:text-lg max-w-2xl mx-auto px-2">Step into our world through images capturing live worship ministrations and prophetic nights.</p>
+          <span className="text-amber-400 tracking-[0.2em] md:tracking-[0.3em] text-xs font-medium uppercase">
+            Moments
+          </span>
+          <h1 
+            className="text-3xl md:text-5xl lg:text-6xl font-bold text-white mt-3 md:mt-4 mb-4 md:mb-6" 
+            style={{ fontFamily: 'Georgia, serif' }}
+          >
+            Gallery
+          </h1>
+          <p className="text-gray-400 text-sm md:text-lg max-w-2xl mx-auto px-2">
+            Step into our world through images capturing live worship ministrations and prophetic nights.
+          </p>
         </div>
+
+        {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 md:mb-12 animate-fade-in-up">
-          {['All', 'Live Events', 'Studio', 'OPÍFÈ', 'Behind the Scenes'].map((cat, i) => (
-            <button key={i} className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full transition-all duration-300 text-xs md:text-sm font-medium ${i === 0 ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-black' : 'border border-amber-600/40 text-amber-400 hover:bg-amber-600/20'} animate-zoom-in`} style={{ animationDelay: `${i * 100}ms` }}>
+          {categories.map((cat, i) => (
+            <button
+              key={i}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full transition-all duration-300 text-xs md:text-sm font-medium ${
+                selectedCategory === cat
+                  ? 'bg-gradient-to-r from-amber-500 to-amber-600 text-black'
+                  : 'border border-amber-600/40 text-amber-400 hover:bg-amber-600/20'
+              } animate-zoom-in`}
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
               {cat}
             </button>
           ))}
         </div>
+
+        {/* Gallery Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          {[
-            { label: 'Live Worship Night', sub: 'Lagos 2024', gradient: 'from-amber-600 to-orange-700' },
-            { label: 'Studio Recording', sub: 'Album Session', gradient: 'from-amber-700 to-yellow-600' },
-            { label: 'OPÍFÈ Performance', sub: 'Prophetic Night', gradient: 'from-orange-600 to-amber-700' },
-            { label: 'Team Rehearsal', sub: 'Weekly Practice', gradient: 'from-yellow-700 to-amber-600' },
-            { label: 'Revival Meeting', sub: 'Abuja 2024', gradient: 'from-amber-800 to-orange-600' },
-            { label: 'Church Service', sub: 'Guest Ministration', gradient: 'from-orange-700 to-yellow-700' }
-          ].map((item, i) => (
-            <div key={i} className={`group relative aspect-square rounded-xl md:rounded-2xl bg-gradient-to-br ${item.gradient} overflow-hidden cursor-pointer animate-zoom-in`} style={{ animationDelay: `${i * 100}ms` }}>
+          {filteredImages.map((item, i) => (
+            <div
+              key={item.id}
+              onClick={() => setSelectedImage(item)}
+              className={`group relative aspect-square rounded-xl md:rounded-2xl bg-gradient-to-br ${item.gradient} overflow-hidden cursor-pointer animate-zoom-in`}
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
+              {/* Image */}
+              <img 
+                src={item.src} 
+                alt={item.title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              
+              {/* Overlay */}
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-all duration-500" />
+              
+              {/* Hover Icon */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center transform group-hover:scale-110 transition-transform">
                   <Image className="text-white" size={20} />
                 </div>
               </div>
-              <div className="absolute bottom-3 md:bottom-4 left-3 md:left-4 right-3 md:right-4">
-                <p className="text-white font-medium text-sm md:text-base">{item.label}</p>
-                <p className="text-white/60 text-xs md:text-sm">{item.sub}</p>
+              
+              {/* Text Overlay */}
+              <div className="absolute bottom-3 md:bottom-4 left-3 md:left-4 right-3 md:right-4 z-10">
+                <p className="text-white font-medium text-sm md:text-base">{item.title}</p>
+                <p className="text-white/70 text-xs md:text-sm">{item.subtitle}</p>
               </div>
             </div>
           ))}
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4 animate-fade-in"
+          onClick={() => setSelectedImage(null)}
+        >
+          <button
+            onClick={() => setSelectedImage(null)}
+            className="absolute top-4 right-4 text-white hover:text-amber-400 transition-colors z-10"
+          >
+            <X size={32} />
+          </button>
+          
+          <div className="max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
+            <img 
+              src={selectedImage.src}
+              alt={selectedImage.title}
+              className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
+            />
+            <div className="text-center mt-6">
+              <h3 className="text-white text-2xl font-bold mb-2">{selectedImage.title}</h3>
+              <p className="text-amber-400">{selectedImage.subtitle}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes zoom-in {
+          from {
+            opacity: 0;
+            transform: scale(0.9);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
+        }
+
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out;
+        }
+
+        .animate-zoom-in {
+          animation: zoom-in 0.5s ease-out backwards;
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.3s ease-out;
+        }
+      `}</style>
     </div>
   );
+};
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -1205,7 +1373,7 @@ const ContactPage = () => {
             {[
               { Icon: Instagram, url: "https://www.instagram.com/theheavenlysounds/" },
               { Icon: Youtube, url: "/" },
-              { Icon: Facebook, url: "https://www.facebook.com/heavenlyimmortalsound" }
+              { Icon: Facebook, url: "https://www.facebook.com/heavenlyimmortalsounds" }
             ].map(({ Icon, url }, i) => (
               <a 
                 key={i} 
