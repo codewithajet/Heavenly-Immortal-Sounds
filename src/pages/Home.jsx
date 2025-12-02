@@ -263,9 +263,9 @@ export default function App() {
           {/* Image Frame */}
           <div className="relative rounded-2xl md:rounded-3xl overflow-hidden border-2 border-amber-700/40 bg-gradient-to-br from-amber-900/20 to-black/50 backdrop-blur-sm shadow-2xl shadow-amber-900/20">
             <img 
-              src="https://res.cloudinary.com/dqhcroiw8/image/upload/v1764349818/Heavenly%20Immortal%20Sounds/Rabbi_Light_Shalom_jex0rk.png"
+              src="https://res.cloudinary.com/dqhcroiw8/image/upload/v1764610988/Heavenly%20Immortal%20Sounds/576838560_1135916388746021_82107128238977323_n_eivo5z.jpg"
               alt="Rabbi Light Shalom - Lead Psalmist & OPÍFÈ Creator"
-              className="w-full h-[500px] md:h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-700"
+              className="w-[400px] h-[500px] md:h-[500px] object-cover transform group-hover:scale-105 transition-transform duration-700"
             />
 
             {/* Overlay */}
